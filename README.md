@@ -1,4 +1,4 @@
-# BERT Semi-Supervised Model Repository
+# Unified-BART : Multi-purpose Text Classification and Generation Model
 
 This repository contains a complete setup for training and evaluating a Unified BART model using custom dataset handling and trainer modifications. (The checkpoints and data is not included in the repository yet. It will be released soon.)
 
