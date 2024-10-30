@@ -7,6 +7,7 @@ import argparse
 from utils.utils import compute_metrics
 
 
+
 def main(args):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")

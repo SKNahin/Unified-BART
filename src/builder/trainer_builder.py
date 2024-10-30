@@ -1,9 +1,47 @@
-from torch.utils.data import DistributedSampler, RandomSampler
-
-from transformers import PreTrainedModel, Trainer, logging 
+import os
+import time
+import math
+import random
+import json
+import nltk
+import numpy as np
+import torch
+import datasets
+from termcolor import colored
+from tqdm.notebook import tqdm
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
+from rouge_score import rouge_scorer, scoring
+from torch.utils.data import DataLoader, Dataset, DistributedSampler, RandomSampler
 from transformers.models.fsmt.configuration_fsmt import FSMTConfig
-
 from transformers.utils import is_torch_tpu_available
+from transformers.trainer_pt_utils import DebugOption, DebugUnderflowOverflow
+from transformers.deepspeed import deepspeed_init, is_deepspeed_zero3_enabled
+from transformers.debug_utils import get_reporting_integration_callbacks
+
+import torch.nn as nn
+from transformers import (
+    AutoModelForSeq2SeqLM,
+    Seq2SeqTrainingArguments,
+    Trainer,
+    BartConfig,
+    PreTrainedTokenizerBase,
+    DataCollatorForSeq2Seq,
+    logging,
+    AutoTokenizer,
+    PreTrainedModel,
+)
+from transformers.trainer_utils import (
+    has_length,
+    denumpify_detensorize,
+    speed_metrics,
+    find_batch_size,
+    nested_concat,
+    nested_numpify,
+    nested_truncate,
+)
+
+logger = logging.get_logger(__name__)
+
 
 
 class EvalLoopOutput(NamedTuple):
